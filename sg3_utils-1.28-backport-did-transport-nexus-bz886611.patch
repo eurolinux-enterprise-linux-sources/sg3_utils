@@ -1,0 +1,51 @@
+diff -pruN a/include/sg_io_linux.h b/include/sg_io_linux.h
+--- a/include/sg_io_linux.h	2009-07-22 20:58:40.000000000 +0100
++++ b/include/sg_io_linux.h	2012-12-12 16:22:16.809365079 +0000
+@@ -71,6 +71,23 @@ extern "C" {
+ #define DID_REQUEUE 0x0d        /* Requeue command (no immediate retry) also
+                                  * without decrementing the retry count    */
+ #endif
++#ifndef DID_TRANSPORT_DISRUPTED
++#define DID_TRANSPORT_DISRUPTED 0x0e /* Transport error disrupted execution
++	                              * and the driver blocked the port to
++		                      * recover the link. Transport class will
++	                              * retry or fail IO */
++#endif
++#ifndef DID_TRANSPORT_FAILFAST
++#define DID_TRANSPORT_FAILFAST  0x0f /* Transport class fastfailed the io */
++#endif
++#ifndef DID_TARGET_FAILURE
++#define DID_TARGET_FAILURE 0x10 /* Permanent target failure, do not retry on
++	                         * other paths */
++#endif
++#ifndef DID_NEXUS_FAILURE
++#define DID_NEXUS_FAILURE 0x11  /* Permanent nexus failure, retry on other
++                                 * paths might yield different results */
++#endif
+ 
+ /* These defines are to isolate applications from kernel define changes */
+ #define SG_LIB_DID_OK           DID_OK
+@@ -87,6 +104,10 @@ extern "C" {
+ #define SG_LIB_DID_SOFT_ERROR   DID_SOFT_ERROR
+ #define SG_LIB_DID_IMM_RETRY    DID_IMM_RETRY
+ #define SG_LIB_DID_REQUEUE      DID_REQUEUE
++#define SG_LIB_DID_TRANSPORT_DISRUPTED	DID_TRANSPORT_DISRUPTED
++#define SG_LIB_DID_TRANSPORT_FAILFAST	DID_TRANSPORT_FAILFAST
++#define SG_LIB_DID_TARGET_FAILURE	DID_TARGET_FAILURE
++#define SG_LIB_DID_NEXUS_FAILURE	DID_NEXUS_FAILURE
+ 
+ /* The following are 'driver_status' codes */
+ #ifndef DRIVER_OK
+diff -pruN sg3_utils-1.28/lib/sg_pt_linux.c sg3_utils-1.28.new/lib/sg_pt_linux.c
+--- sg3_utils-1.28/lib/sg_pt_linux.c	2009-09-20 14:12:50.000000000 +0100
++++ sg3_utils-1.28.new/lib/sg_pt_linux.c	2012-12-12 16:25:24.480166827 +0000
+@@ -55,7 +55,8 @@ static const char * linux_host_bytes[] =
+     "DID_OK", "DID_NO_CONNECT", "DID_BUS_BUSY", "DID_TIME_OUT",
+     "DID_BAD_TARGET", "DID_ABORT", "DID_PARITY", "DID_ERROR",
+     "DID_RESET", "DID_BAD_INTR", "DID_PASSTHROUGH", "DID_SOFT_ERROR",
+-    "DID_IMM_RETRY", "DID_REQUEUE"
++    "DID_IMM_RETRY", "DID_REQUEUE", "DID_TRANSPORT_DISRUPTED",
++    "DID_TRANSPORT_FAILFAST", "DID_TARGET_FAILURE", "DID_NEXUS_FAILURE"
+ };
+ 
+ #define LINUX_HOST_BYTES_SZ \

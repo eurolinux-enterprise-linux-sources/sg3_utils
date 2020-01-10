@@ -4,7 +4,7 @@
 Summary: Utilities for devices that use SCSI command sets
 Name: sg3_utils
 Version: 1.28
-Release: 10%{?dist}
+Release: 12%{?dist}
 License: GPLv2+ and BSD
 Group: Applications/System
 Source0: http://sg.danny.cz/sg/p/sg3_utils-%{version}.tgz
@@ -14,7 +14,8 @@ Patch1: sg3_utils-1.28-dont-open-dev-snapshot.patch
 Patch2: 0001-Backport-sg_xcopy-and-sg_copy_results-from-sg3_utils.patch
 Patch3: 0001-Fix-issues-with-multi-word-device-types.patch
 Patch4: 0001-Fix-dev-null-redirect-mistakes.patch
-Patch5: 0001-Fix-issues-with-whitespace-in-device-type.patch
+Patch5: sg3_utils-1.28-backport-did-transport-nexus-bz886611.patch
+Patch6: 0001-Fix-issues-with-whitespace-in-device-type.patch
 URL: http://sg.danny.cz/sg/sg3_utils.html
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires: %{name}-libs = %{version}-%{release}
@@ -55,12 +56,13 @@ developing applications.
 %setup -q
 %patch1 -p1 -b .dev-snapshot
 %patch2 -p1 -b .sg_xcopy
+%patch5 -p1 -b .did-trans-nexus
 
 # rescan-scsi-bus.sh
 cp -p %{SOURCE1} %{rescan_script}
 %patch3 -p1 -b .mwdevtype
 %patch4 -p1 -b .fixdevnull
-%patch5 -p1 -b .whitespacedevtype
+%patch6 -p1 -b .whitespacedevtype
 
 %build
 autoreconf -vi  # Needed because the sg_xcopy patch modifies a Makefile.am file
@@ -92,7 +94,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root)
-%doc ChangeLog COVERAGE CREDITS INSTALL README README.sg_start
+%doc ChangeLog COVERAGE CREDITS README README.sg_start COPYING
 %attr(755,root,root) %{_bindir}/*
 %{_mandir}/man8/*
 
@@ -107,12 +109,19 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Thu Mar 3 2016 David Sommerseth <davids@redhat.com> - 1.28-10
+* Thu Mar 3 2016 David Sommerseth <davids@redhat.com> - 1.28-12
 - Fix issues with leading and trailing white spaces in device types (#1311138)
 
-* Wed Jan 20 2016 David Sommerseth <davids@redhat.com> - 1.28-9
-- Fix issues with multi worded device types (#1291579)
-- Avoid deletion of /dev/null (#1300338)
+* Fri Dec 18 2015 David Sommerseth <davids@redhat.com> - 1.28-11
+- Avoid deletion of /dev/null (#1245302)
+- Fix sg_persist returns "Host_status=0x11 is invalid", backport of DID_TRANSPORT_*/DID_TARGET_/DID_NEXUS_FAILURE flags (#886611)
+
+* Fri Dec 11 2015 David Sommerseth <davids@redhat.com> - 1.28-10
+- Fix issues with multi worded device types (#1210438)
+
+* Mon Jun 22 2015 David Sommerseth <davids@redhat.com> - 1.28-9
+- Added packaging of COPYING (#974147)
+- Removed packaging of INSTALL (info not needed for binary installs)
 
 * Fri Feb 27 2015 David Sommerseth <davids@redhat.com> - 1.28-8
 - Added some late upstream updates fixing some coverity scan issues
