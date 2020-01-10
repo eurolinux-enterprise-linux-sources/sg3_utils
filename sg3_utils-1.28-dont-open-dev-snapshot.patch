@@ -1,0 +1,13 @@
+diff -ru sg3_utils-1.28.old/src/sginfo.c sg3_utils-1.28/src/sginfo.c
+--- sg3_utils-1.28.old/src/sginfo.c	2009-07-24 21:58:51.000000000 +0200
++++ sg3_utils-1.28/src/sginfo.c	2013-04-09 12:26:26.228650630 +0200
+@@ -3336,6 +3336,9 @@
+         if ( strncmp("sd",entry->d_name,2) == 0 && isdigit(entry->d_name[strlen(entry->d_name)-1]) ) {
+                 continue;
+         }
++        if ( strncmp("snapshot",entry->d_name,8) == 0 ) {
++                continue;
++        }
+ 
+         snprintf(dev_name, sizeof(dev_name),"/dev/%s",entry->d_name);
+ 
