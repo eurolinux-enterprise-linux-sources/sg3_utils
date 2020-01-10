@@ -1,0 +1,13 @@
+--- a/rescan-scsi-bus.sh	2016-02-22 17:03:21.171518417 +0100
++++ b/rescan-scsi-bus.sh	2016-02-23 13:45:49.978808206 +0100
+@@ -278,7 +278,9 @@
+     return 1
+   fi
+   TMPSTR=`echo "$SCSISTR" | sed -n 's/.*Type: *\(.*\) *ANSI.*/\1/p'`
+-  if [ "$TMPSTR" != "$TYPE" ] ; then
++  NTMPSTR="$(sed -e 's/[[:space:]]*$//' -e 's/^[[:space:]]*//' <<<${TMPSTR})"
++  NTYPE="$(sed -e 's/[[:space:]]*$//' -e 's/^[[:space:]]*//' <<<${TYPE})"
++  if [ "$NTMPSTR" != "$NTYPE" ] ; then
+     echo -e "\e[A\e[A\e[A\e[A${red}$SGDEV changed: ${bold}\nfrom:${TMPSTR} \nto: $TYPE ${norm} \n\n\n"
+     return 1
+   fi
