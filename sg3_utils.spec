@@ -4,7 +4,7 @@
 Summary: Utilities for devices that use SCSI command sets
 Name: sg3_utils
 Version: 1.28
-Release: 12%{?dist}
+Release: 13%{?dist}
 License: GPLv2+ and BSD
 Group: Applications/System
 Source0: http://sg.danny.cz/sg/p/sg3_utils-%{version}.tgz
@@ -16,6 +16,7 @@ Patch3: 0001-Fix-issues-with-multi-word-device-types.patch
 Patch4: 0001-Fix-dev-null-redirect-mistakes.patch
 Patch5: sg3_utils-1.28-backport-did-transport-nexus-bz886611.patch
 Patch6: 0001-Fix-issues-with-whitespace-in-device-type.patch
+Patch7: BZ_1380346_fix_scan_specific_lun_only.patch
 URL: http://sg.danny.cz/sg/sg3_utils.html
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires: %{name}-libs = %{version}-%{release}
@@ -63,6 +64,7 @@ cp -p %{SOURCE1} %{rescan_script}
 %patch3 -p1 -b .mwdevtype
 %patch4 -p1 -b .fixdevnull
 %patch6 -p1 -b .whitespacedevtype
+%patch7 -p1 -b .scanluns
 
 %build
 autoreconf -vi  # Needed because the sg_xcopy patch modifies a Makefile.am file
@@ -109,6 +111,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Dec 07 2017 Gris Ge <fge@redhat.com> - 1.28-13
+- Fix regression on '--luns' option. (RHBZ #1380346)
+
 * Thu Mar 3 2016 David Sommerseth <davids@redhat.com> - 1.28-12
 - Fix issues with leading and trailing white spaces in device types (#1311138)
 

@@ -1,0 +1,21 @@
+diff -Nur ./sg3_utils-1.28_old/rescan-scsi-bus.sh sg3_utils-1.28/rescan-scsi-bus.sh
+--- ./sg3_utils-1.28_old/rescan-scsi-bus.sh	2017-12-07 14:46:49.277643500 +0800
++++ sg3_utils-1.28/rescan-scsi-bus.sh	2017-12-07 14:48:47.021486001 +0800
+@@ -672,7 +672,16 @@
+     else
+       match=1
+     fi
+-    test $match -eq 1 && doreportlun
++
++    test $match -eq 0 && continue
++
++    if [ -z "$lunsearch" ] ; then
++      doreportlun
++    else
++      for lun in $lunsearch ; do
++        dolunscan
++      done
++    fi
+   done
+ }
+ 
