@@ -4,7 +4,7 @@
 Summary: Utilities for devices that use SCSI command sets
 Name: sg3_utils
 Version: 1.28
-Release: 8%{?dist}
+Release: 9%{?dist}
 License: GPLv2+ and BSD
 Group: Applications/System
 Source0: http://sg.danny.cz/sg/p/sg3_utils-%{version}.tgz
@@ -12,6 +12,8 @@ Source0: http://sg.danny.cz/sg/p/sg3_utils-%{version}.tgz
 Source1: %{rescan_script}-%{rescan_version}
 Patch1: sg3_utils-1.28-dont-open-dev-snapshot.patch
 Patch2: 0001-Backport-sg_xcopy-and-sg_copy_results-from-sg3_utils.patch
+Patch3: 0001-Fix-issues-with-multi-word-device-types.patch
+Patch4: 0001-Fix-dev-null-redirect-mistakes.patch
 URL: http://sg.danny.cz/sg/sg3_utils.html
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires: %{name}-libs = %{version}-%{release}
@@ -55,7 +57,8 @@ developing applications.
 
 # rescan-scsi-bus.sh
 cp -p %{SOURCE1} %{rescan_script}
-
+%patch3 -p1 -b .mwdevtype
+%patch4 -p1 -b .fixdevnull
 
 %build
 autoreconf -vi  # Needed because the sg_xcopy patch modifies a Makefile.am file
@@ -102,6 +105,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Jan 20 2016 David Sommerseth <davids@redhat.com> - 1.28-9
+- Fix issues with multi worded device types (#1291579)
+- Avoid deletion of /dev/null (#1300338)
+
 * Fri Feb 27 2015 David Sommerseth <davids@redhat.com> - 1.28-8
 - Added some late upstream updates fixing some coverity scan issues
 
