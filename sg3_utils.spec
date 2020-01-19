@@ -3,7 +3,7 @@
 Summary: Utilities for devices that use SCSI command sets
 Name: sg3_utils
 Version: 1.37
-Release: 12%{?dist}
+Release: 9%{?dist}
 License: GPLv2+ and BSD
 Group: Applications/System
 Source0: http://sg.danny.cz/sg/p/sg3_utils-%{version}.tgz
@@ -22,8 +22,6 @@ Patch6: sg_rdac_additional_upstream_fixes.patch
 Patch7: sg3_utils-1.37-rescan-scsi-typo.patch
 #document -m/--multipath option in rescan-scsi-bus.sh script (#1357851)
 Patch8: sg3_utils-1.37-rescan-scsi-missingoption.patch
-Patch9: BZ_1380744-rescan-scsi-bus.sh-Add-lunsearch-filter-to-searchexi.patch
-Patch10: BZ_1360915-rescan-scsi-bus.sh-Fixup-help-text-for-forcerescan.patch
 URL: http://sg.danny.cz/sg/sg3_utils.html
 Requires: %{name}-libs = %{version}-%{release}
 
@@ -70,8 +68,6 @@ developing applications.
 %patch6 -p1 -b .upstream2
 %patch7 -p1 -b .typo
 %patch8 -p1 -b .missingopt
-%patch9 -p1 -b .rescan_all_lun
-%patch10 -p1 -b .help_forcerescan_forceremove
 
 %build
 %configure --disable-static
@@ -114,17 +110,6 @@ install -p -m 644 %{SOURCE2} $RPM_BUILD_ROOT%{_mandir}/man8
 
 
 %changelog
-* Wed May 10 2017 Gris Ge <fge@redhat.com> 1.37-12
-- Fix the manpage of `forceremove` and `forcerescan` command.
-  (RHBZ #1360915)
-
-* Tue Mar 14 2017 Gris Ge <fge@redhat.com> - 1.37-11
-- Fix the help message of `forceremove` and `forcerescan` command.
-  (RHBZ #1360915)
-
-* Tue Mar 07 2017 Gris Ge <fge@redhat.com> - 1.37-10
-- Fix rescan-scsi-bus.sh for scan all luns. (RHBZ #1380744)
-
 * Tue Jul 19 2016 Ondrej Vasik <ovasik@redhat.com> - 1.37-9
 - rescan-scsi-bus.sh: document -m/--multipath option (#1357851) 
 
