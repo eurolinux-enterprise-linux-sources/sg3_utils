@@ -1,0 +1,12 @@
+diff -up sg3_utils-1.37/src/sg_turs.c.bak sg3_utils-1.37/src/sg_turs.c
+--- sg3_utils-1.37/src/sg_turs.c.bak	2019-02-26 10:52:18.000000000 -0500
++++ sg3_utils-1.37/src/sg_turs.c	2019-02-26 10:53:17.264066087 -0500
+@@ -209,7 +209,7 @@ static int process_cl_old(struct opts_t
+                     ++optsp->do_verbose;
+                     break;
+                 case '?':
+-                    usage_old();
++                    ++optsp->do_help;
+                     return 0;
+                 default:
+                     jmp_out = 1;

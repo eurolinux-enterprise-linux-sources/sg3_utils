@@ -3,7 +3,7 @@
 Summary: Utilities for devices that use SCSI command sets
 Name: sg3_utils
 Version: 1.37
-Release: 17%{?dist}
+Release: 18%{?dist}
 License: GPLv2+ and BSD
 Group: Applications/System
 Source0: http://sg.danny.cz/sg/p/sg3_utils-%{version}.tgz
@@ -30,6 +30,7 @@ Patch13: BZ_1359274_sg_logs_fix_inline_help.patch
 Patch14: BZ_1359282_sg_requests_fix_manpage.patch
 Patch15: BZ_1359286_sg_senddiag_fix_help.patch
 Patch16: BZ_1359292_sg_write_buffer_fix_help.patch
+Patch17: BZ_1601797_sg_turs_usage.patch
 URL: http://sg.danny.cz/sg/sg3_utils.html
 Requires: %{name}-libs = %{version}-%{release}
 
@@ -84,6 +85,7 @@ developing applications.
 %patch14 -p1 -b .sg_requests_man
 %patch15 -p1 -b .sg_senddiag_help
 %patch16 -p1 -b .sg_write_buffer_help
+%patch17 -p1 -b .sg_turs_usage
 
 %build
 %configure --disable-static
@@ -126,6 +128,9 @@ install -p -m 644 %{SOURCE2} $RPM_BUILD_ROOT%{_mandir}/man8
 
 
 %changelog
+* Tue Feb 26 2019 Tomas Bzatek <tbzatek@redhat.com> 1.37-18
+- Fix sg_turs help invocation in an old mode (#1601797)
+
 * Tue Jul 17 2018 Gris Ge <fge@redhat.com> 1.37-17
 - Fix help documents of sg_requests, sg_senddiag and sg_write_buffer.
   (RHBZ #1359282, #1359286, #1359292)
