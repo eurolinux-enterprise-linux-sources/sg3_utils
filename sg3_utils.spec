@@ -3,12 +3,16 @@
 Summary: Utilities for devices that use SCSI command sets
 Name: sg3_utils
 Version: 1.37
-Release: 18%{?dist}
+Release: 18%{?dist}.1
 License: GPLv2+ and BSD
 Group: Applications/System
 Source0: http://sg.danny.cz/sg/p/sg3_utils-%{version}.tgz
 Source1: rescan-scsi-bus.sh.8
 Source2: scsi-rescan.8
+# https://bugzilla.redhat.com/show_bug.cgi?id=1684302
+# [HPE 7.6 Bug] Fibre Channel NPIV - device names in /dev/disk/by-path are not persistent / unique
+Source3: 59-fc-wwpn-id.rules
+Source4: fc_wwpn_id
 # https://bugzilla.redhat.com/show_bug.cgi?id=920687
 Patch0: sg3_utils-1.37-dont-open-dev-snapshot.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=948463
@@ -107,6 +111,11 @@ install -p -m 755 scripts/%{rescan_script} $RPM_BUILD_ROOT%{_bindir}
 install -p -m 644 %{SOURCE1} $RPM_BUILD_ROOT%{_mandir}/man8
 install -p -m 644 %{SOURCE2} $RPM_BUILD_ROOT%{_mandir}/man8
 
+mkdir -p $RPM_BUILD_ROOT%{_udevrulesdir}/
+install -p -m 644 %{SOURCE3} $RPM_BUILD_ROOT%{_udevrulesdir}/
+mkdir -p $RPM_BUILD_ROOT%{_prefix}/lib/udev/rules.d
+install -m 0755 %{SOURCE4} $RPM_BUILD_ROOT%{_prefix}/lib/udev/
+
 
 %post libs -p /sbin/ldconfig
 
@@ -117,6 +126,8 @@ install -p -m 644 %{SOURCE2} $RPM_BUILD_ROOT%{_mandir}/man8
 %doc AUTHORS BSD_LICENSE COPYING COVERAGE CREDITS ChangeLog README README.sg_start
 %{_bindir}/*
 %{_mandir}/man8/*
+%{_udevrulesdir}/59-fc-wwpn-id.rules
+%{_prefix}/lib/udev/fc_wwpn_id
 
 %files libs
 %doc BSD_LICENSE COPYING
@@ -128,6 +139,9 @@ install -p -m 644 %{SOURCE2} $RPM_BUILD_ROOT%{_mandir}/man8
 
 
 %changelog
+* Fri Aug 16 2019 Tomas Bzatek <tbzatek@redhat.com> 1.37-18.el7_7.1
+- Add 59-fc-wwpn-id.rules (#1684302)
+
 * Tue Feb 26 2019 Tomas Bzatek <tbzatek@redhat.com> 1.37-18
 - Fix sg_turs help invocation in an old mode (#1601797)
 
