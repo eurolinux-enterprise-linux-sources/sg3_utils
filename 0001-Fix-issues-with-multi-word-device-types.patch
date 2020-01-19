@@ -1,0 +1,31 @@
+commit 9a2c94700471486dd6487b7659762a41f7ee33c7
+Author: David Sommerseth <davids@redhat.com>
+Date:   Fri Apr 15 20:31:32 2016 +0200
+
+    Fix issues with multi word device types
+    
+    When running rescan-scsi-bus.sh on systems with device types such
+    as "Medium Changer" or "Optical Device", the following error can be
+    observed:
+    
+       /usr/bin/rescan-scsi-bus.sh: line 281: [: too many arguments
+    
+    Signed-off-by: David Sommerseth <davids@redhat.com>
+
+diff --git a/scripts/rescan-scsi-bus.sh b/scripts/rescan-scsi-bus.sh
+old mode 100755
+new mode 100644
+index 81112c1..7ec9323
+--- a/scripts/rescan-scsi-bus.sh
++++ b/scripts/rescan-scsi-bus.sh
+@@ -278,7 +278,9 @@ testonline ()
+     return 1
+   fi
+   TMPSTR=`echo "$SCSISTR" | sed -n 's/.*Type: *\(.*\) *ANSI.*/\1/p'`
+-  if [ $TMPSTR != $TYPE ] ; then
++  NTMPSTR="$(sed -e 's/[[:space:]]*$//' -e 's/^[[:space:]]*//' <<<${TMPSTR})"
++  NTYPE="$(sed -e 's/[[:space:]]*$//' -e 's/^[[:space:]]*//' <<<${TYPE})"
++  if [ "$NTMPSTR" != "$NTYPE" ] ; then
+     echo -e "\e[A\e[A\e[A\e[A${red}$SGDEV changed: ${bold}\nfrom:${TMPSTR} \nto: $TYPE ${norm} \n\n\n"
+     return 1
+   fi

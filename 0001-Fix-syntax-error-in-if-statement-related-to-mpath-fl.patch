@@ -1,0 +1,29 @@
+From e946e403b434d27c88dc7819fb3589419cdfd954 Mon Sep 17 00:00:00 2001
+From: David Sommerseth <davids@redhat.com>
+Date: Fri, 22 Apr 2016 18:58:08 +0200
+Subject: [PATCH] Fix syntax error in if-statement related to mpath flush
+ operation
+
+Without this patch, the error "[-x: command not found" would be seen
+when running 'rescan-scsi-bus.sh -f' on a system with multipath support
+packages installed.
+---
+ scripts/rescan-scsi-bus.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/rescan-scsi-bus.sh b/scripts/rescan-scsi-bus.sh
+index 4468cd3..caa031f 100644
+--- a/scripts/rescan-scsi-bus.sh
++++ b/scripts/rescan-scsi-bus.sh
+@@ -1090,7 +1090,7 @@ declare -i updated=0
+ declare -i rmvd=0
+ 
+ if [ -n "$flush" ] ; then
+-  if [-x $MULTIPATH ] ; then
++  if [ -x $MULTIPATH ] ; then
+     flushmpaths 1
+   fi
+ fi
+-- 
+1.8.3.1
+

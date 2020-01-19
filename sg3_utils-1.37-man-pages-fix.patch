@@ -1,0 +1,95 @@
+From 1653f314de9f0a0415259f2182bf65a745537f33 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan@danny.cz>
+Date: Tue, 28 Jan 2014 14:15:56 +0100
+Subject: [PATCH] remove duplicit words in man pages
+
+---
+ doc/sg3_utils.8         | 2 +-
+ doc/sg_format.8         | 2 +-
+ doc/sg_get_lba_status.8 | 2 +-
+ doc/sg_ses.8            | 2 +-
+ doc/sg_stpg.8           | 2 +-
+ doc/sginfo.8            | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/doc/sg3_utils.8 b/doc/sg3_utils.8
+index ae9b181..d295eeb 100644
+--- a/doc/sg3_utils.8
++++ b/doc/sg3_utils.8
+@@ -146,7 +146,7 @@ drives and "cd" for SCSI CD/DVD/BD drives. Each SCSI device has a
+ corresponding pass\-through device name of the form /dev/pass<num>
+ where <num> is an integer starting at zero. The "camcontrol devlist"
+ command may be useful for finding out which SCSI device names are
+-available and the correspondence between between class and pass\-through
++available and the correspondence between class and pass\-through
+ names.
+ .SH SOLARIS DEVICE NAMING
+ SCSI device names below the /dev directory have a form like: c5t4d3s2
+diff --git a/doc/sg_format.8 b/doc/sg_format.8
+index 4cf4e82..055ff04 100644
+--- a/doc/sg_format.8
++++ b/doc/sg_format.8
+@@ -265,7 +265,7 @@ protection type of a disk can be found in the "P_TYPE" and "PROT_EN"
+ fields in the response of a READ CAPACITY (16) command (e.g. with
+ the 'sg_readcap \-\-long' utility).
+ .PP
+-Given that a device supports a particular protection type, a user can then
++Given that a device supports a particular protection type, a user can
+ then choose to format that disk with that protection type by setting
+ the "FMTPINFO" and "Protection Field Usage" fields in the FORMAT UNIT
+ command. Those fields correspond to the \fI\-\-fmtpinfo=FPI\fR and the
+diff --git a/doc/sg_get_lba_status.8 b/doc/sg_get_lba_status.8
+index ab8269c..bbb0c09 100644
+--- a/doc/sg_get_lba_status.8
++++ b/doc/sg_get_lba_status.8
+@@ -28,7 +28,7 @@ when use once then one LBA status descriptor per line is output to stdout.
+ Each line has this
+ format: "0x<descriptor_LBA>  0x<blocks> <provisioning_status>". So the
+ descriptor LBA and blocks are output in hex and the provisioning status
+-in decimal. When used twice (e.g. '\-bb' or '\-\-brief \-\-brief') the
++in decimal. When used twice (e.g. '\-bb' or '\-\-brief \-\-brief')
+ the provisioning status of the given \fILBA\fR (or LBA 0 if the
+ \fI\-\-lba\fR option is not given) is output to stdout. A check is made
+ that the given \fILBA\fR lies on the range of the first returned LBA
+diff --git a/doc/sg_ses.8 b/doc/sg_ses.8
+index 1cd71c5..a94fe48 100644
+--- a/doc/sg_ses.8
++++ b/doc/sg_ses.8
+@@ -237,7 +237,7 @@ given.
+ .PP
+ One of two command lines variants can be used to specify indexes:
+ \fI\-\-index=TIA,II\fR where \fITIA\fR is either an type header index (TI)
+-or an Element type abbreviation (A) (e.g. "ps" or "ps1"). \fIII\fR is
++or an Element type abbreviation (A) (e.g. "ps" or "ps1"). \fIII\fR
+ is either an individual index or "\-1" to specify the overall element. The
+ second variant is \fI\-\-index=IIA\fR where \fIIIA\fR is either an individual
+ index (II) or an Element type abbreviation (A). When \fIIIA\fR is an
+diff --git a/doc/sg_stpg.8 b/doc/sg_stpg.8
+index f93f029..8ab6b1a 100644
+--- a/doc/sg_stpg.8
++++ b/doc/sg_stpg.8
+@@ -104,7 +104,7 @@ identifier (i.e. acts on one or more target ports).
+ When \fI\-\-tp=\fR is given then the same number of elements should be
+ given to the \fI\-\-state=\fR option. If more than one list element is
+ given to \fI\-\-tp=\fR and an equal number of elements is _not_ given
+-to the the \fI\-\-state=\fR option, then if only one state is specified
++to the \fI\-\-state=\fR option, then if only one state is specified
+ then it is repeated.
+ .SH EXIT STATUS
+ The exit status of sg_stpg is 0 when it is successful. Otherwise see
+diff --git a/doc/sginfo.8 b/doc/sginfo.8
+index 8d570b1..7abff65 100644
+--- a/doc/sginfo.8
++++ b/doc/sginfo.8
+@@ -287,7 +287,7 @@ hex (mode page index in the first column and the corresponding byte
+ value in the second column) use "\-u 0xa". Mode pages (subpage code == 0)
+ start at index position 2 while subpages start at index position 4.
+ If the "\-Xu ..." option is used then a list a hex values each value
+-prefixed by "@" is output. Mode (sub)page values can then be modified with
++prefixed by "@" is output. Mode (sub)page values can then be modified
+ with the "\-RXu ..." option.
+ .PP
+ .SH RESTRICTIONS
+-- 
+1.8.1.4
+

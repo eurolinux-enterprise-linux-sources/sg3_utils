@@ -1,0 +1,14 @@
+diff -Nur sg3_utils-1.37_old/scripts/rescan-scsi-bus.sh sg3_utils-1.37/scripts/rescan-scsi-bus.sh
+--- sg3_utils-1.37_old/scripts/rescan-scsi-bus.sh	2017-03-14 14:45:43.312032787 +0800
++++ sg3_utils-1.37/scripts/rescan-scsi-bus.sh	2017-03-14 14:47:06.997039234 +0800
+@@ -964,8 +964,8 @@
+     echo "--issue-lip:     same as -i"
+     echo "--wide:          same as -w"
+     echo "--multipath:     same as -m"
+-    echo "--forcerescan:   Rescan existing devices"
+-    echo "--forceremove:   Remove and readd every device (DANGEROUS)"
++    echo "--forceremove:   Remove stale devices (DANGEROUS)"
++    echo "--forcerescan:   Remove and readd existing devices (DANGEROUS)"
+     echo "--nooptscan:     don't stop looking for LUNs if 0 is not found"
+     echo "--color:         use coloured prefixes OLD/NEW/DEL"
+     echo "--hosts=LIST:    Scan only host(s) in LIST"

@@ -1,0 +1,19 @@
+diff -urNp sg3_utils-1.37-orig/scripts/rescan-scsi-bus.sh sg3_utils-1.37-new/scripts/rescan-scsi-bus.sh
+--- sg3_utils-1.37-orig/scripts/rescan-scsi-bus.sh	2016-07-19 15:49:36.401733259 +0200
++++ sg3_utils-1.37-new/scripts/rescan-scsi-bus.sh	2016-07-19 15:54:35.719136146 +0200
+@@ -929,6 +929,7 @@ if test @$1 = @--help -o @$1 = @-h -o @$
+     echo " -L NUM  activates scanning for LUNs 0--NUM [default: 0]"
+     echo " -w      scan for target device IDs 0--15   [default: 0--7]"
+     echo " -c      enables scanning of channels 0 1   [default: 0 / all detected ones]"
++    echo " -m      update multipath devices           [default: disabled]"
+     echo " -r      enables removing of devices        [default: disabled]"
+     echo " -f      flush failed multipath devices     [default: disabled]"
+     echo " -i      issue a FibreChannel LIP reset     [default: disabled]"
+@@ -939,6 +940,7 @@ if test @$1 = @--help -o @$1 = @-h -o @$
+     echo "--flush:         same as -f"
+     echo "--issue-lip:     same as -i"
+     echo "--wide:          same as -w"
++    echo "--multipath:     same as -m"
+     echo "--forcerescan:   Rescan existing devices"
+     echo "--forceremove:   Remove and readd every device (DANGEROUS)"
+     echo "--nooptscan:     don't stop looking for LUNs if 0 is not found"

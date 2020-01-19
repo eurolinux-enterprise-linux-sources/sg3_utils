@@ -1,0 +1,115 @@
+From 9d2adc90e76e76c07ee63b2b2868579188fec1a7 Mon Sep 17 00:00:00 2001
+From: David Sommerseth <davids@redhat.com>
+Date: Fri, 15 Apr 2016 23:53:18 +0200
+Subject: [PATCH] Fix /dev/null redirect mistakes
+
+Several places there are attempts to redirect to /dev/null, but
+missing the redirect operator.  This causes also /dev/null to be
+deleted when running 'rescan-scsi-bus.sh -u'.
+
+Patch based on proposed patches in Red Hat bugzilla 1245302
+---
+ scripts/rescan-scsi-bus.sh | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/scripts/rescan-scsi-bus.sh b/scripts/rescan-scsi-bus.sh
+index 7ec9323..4468cd3 100644
+--- a/scripts/rescan-scsi-bus.sh
++++ b/scripts/rescan-scsi-bus.sh
+@@ -234,7 +234,7 @@ testonline ()
+   if test ! -x /usr/bin/sg_turs; then return 0; fi
+   sgdevice
+   if test -z "$SGDEV"; then return 0; fi
+-  sg_turs /dev/$SGDEV >/dev/null 2>&1
++  sg_turs /dev/$SGDEV &>/dev/null
+   RC=$?
+   # Handle in progress of becoming ready and unit attention -- wait at max 11s
+   declare -i ctr=0
+@@ -246,7 +246,7 @@ testonline ()
+     if test $RC = 2 -a "$RMB" != "1"; then echo -n "."; let LN+=1; sleep 1
+     else usleep 20000; fi
+     let ctr+=1
+-    sg_turs /dev/$SGDEV >/dev/null 2>&1
++    sg_turs /dev/$SGDEV &>/dev/null
+     RC=$?
+   done
+   if test $ctr != 0; then white_out; fi
+@@ -703,7 +703,7 @@ findremapped()
+   # Trigger udev to update the info
+   echo -n "Triggering udev to update device information... "
+   /sbin/udevadm trigger
+-  udevadm_settle 2&>1 /dev/null
++  udevadm_settle &>/dev/null
+   echo "Done"
+ 
+   # See what changed and reload the respective multipath device if applicable
+@@ -724,12 +724,12 @@ findremapped()
+       incrchgd "$hctl"
+     fi
+   done < $tmpfile
+-  rm $tmpfile 2&>1 /dev/null
++  rm $tmpfile &>/dev/null
+ 
+   if test -n "$mp_enable" -a -n "$mpaths" ; then
+     echo "Updating multipath device mappings"
+     flushmpaths
+-    $MULTIPATH | grep "create:" 2> /dev/null #2&>1 /dev/null
++    $MULTIPATH | grep "create:" 2> /dev/null
+   fi
+ }
+ 
+@@ -831,14 +831,14 @@ reloadmpaths()
+ 
+   if [ "$1" = "1" ] ; then
+     echo "Reloading all multipath devices"
+-    $MULTIPATH -r 2&>1 /dev/null
++    $MULTIPATH -r &>/dev/null
+     return
+   fi
+ 
+   # Reload the multipath devices
+   for mpath in $mpaths ; do
+     echo "Reloading multipath device $mpath"
+-    $MULTIPATH -r $mpath 2&>1 /dev/null
++    $MULTIPATH -r $mpath &>/dev/null
+   done
+ }
+ 
+@@ -851,9 +851,9 @@ flushmpaths()
+       num=$($DMSETUP status $mpath | awk 'BEGIN{RS=" ";active=0}/[0-9]+:[0-9]+/{dev=1}/A/{if (dev == 1) active++; dev=0} END{ print active }')
+       if [ $num -eq 0 ] ; then
+         echo -n "Flushing multipath device $mpath...  "
+-        $DMSETUP message $mpath 0 fail_if_no_path 2&>1 /dev/null
+-        $MULTIPATH -f $mpath 2&>1 /dev/null
+-        $DMSETUP status $mpath 2&>1 /dev/null
++        $DMSETUP message $mpath 0 fail_if_no_path &>/dev/null
++        $MULTIPATH -f $mpath &>/dev/null
++        $DMSETUP status $mpath &>/dev/null
+         if test "$?" = "1" ; then
+           echo "Done"
+         else
+@@ -866,9 +866,9 @@ flushmpaths()
+   # Flush all the devs specified in $mpaths
+   for mpath in $mpaths ; do
+     echo -n "Flushing multipath device $mpath...  "
+-    $DMSETUP message $mpath 0 fail_if_no_path 2&>1 /dev/null
+-    $MULTIPATH -f $mpath 2&>1 /dev/null
+-    $DMSETUP status $mpath 2&>1 /dev/null
++    $DMSETUP message $mpath 0 fail_if_no_path &>/dev/null
++    $MULTIPATH -f $mpath &>/dev/null
++    $DMSETUP status $mpath &>/dev/null
+     if test "$?" = "1" ; then
+       echo "Done"
+     else
+@@ -967,7 +967,7 @@ if test ! -d /sys/class/scsi_host/ -a ! -d /proc/scsi/; then
+ fi	
+ 
+ # Make sure sg is there
+-modprobe sg >/dev/null 2>&1
++modprobe sg &>/dev/null
+ 
+ if test -x /usr/bin/sg_inq; then
+   sg_version=$(sg_inq -V 2>&1 | cut -d " " -f 3)
+-- 
+1.8.3.1
+
