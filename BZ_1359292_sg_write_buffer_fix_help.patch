@@ -1,0 +1,12 @@
+diff -Nur sg3_utils-1.37_old/src/sg_write_buffer.c sg3_utils-1.37/src/sg_write_buffer.c
+--- sg3_utils-1.37_old/src/sg_write_buffer.c	2013-07-31 07:58:53.000000000 +0800
++++ sg3_utils-1.37/src/sg_write_buffer.c	2018-07-17 22:02:28.434790002 +0800
+@@ -72,7 +72,7 @@
+           "deduced from FILE\n"
+           "    --mode=MO|-m MO        write buffer mode, MO is number or "
+           "acronym (def: 0)\n"
+-          "    --off=OFF|-o OFF       buffer offset (unit: bytes, def: 0)\n"
++          "    --offset=OFF|-o OFF    buffer offset (unit: bytes, def: 0)\n"
+           "    --raw|-r               read from stdin (same as '-I -')\n"
+           "    --skip=SKIP|-s SKIP    bytes in file FILE to skip before "
+           "reading\n"

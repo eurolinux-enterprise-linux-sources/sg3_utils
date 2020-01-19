@@ -1,0 +1,50 @@
+diff -Nur sg3_utils-1.37_old/scripts/rescan-scsi-bus.sh sg3_utils-1.37/scripts/rescan-scsi-bus.sh
+--- sg3_utils-1.37_old/scripts/rescan-scsi-bus.sh	2018-06-12 19:54:42.668354127 +0800
++++ sg3_utils-1.37/scripts/rescan-scsi-bus.sh	2018-06-12 19:55:13.261890351 +0800
+@@ -273,9 +273,19 @@
+     return 2
+   fi
+   TMPSTR=`echo "$SCSISTR" | grep 'Vendor:'`
+-  if [ "$TMPSTR" != "$STR" ]; then
+-    echo -e "\e[A\e[A\e[A\e[A${red}$SGDEV changed: ${bold}\nfrom:${SCSISTR#* } \nto: $STR ${norm} \n\n\n"
+-    return 1
++  if test $ignore_rev -eq 0 ; then
++      if [ "$TMPSTR" != "$STR" ]; then
++        echo -e "\e[A\e[A\e[A\e[A${red}$SGDEV changed: ${bold}\nfrom:${SCSISTR#* } \nto: $STR ${norm} \n\n\n"
++        return 1
++      fi
++  else
++      # Ignore disk revision change
++      local old_str_no_rev=`echo "$TMPSTR" | sed -e 's/.\{4\}$//'`
++      local new_str_no_rev=`echo "$STR" | sed -e 's/.\{4\}$//'`
++      if [ "$old_str_no_rev" != "$new_str_no_rev" ]; then
++        echo -e "\e[A\e[A\e[A\e[A${red}$SGDEV changed: ${bold}\nfrom:${SCSISTR#* } \nto: $STR ${norm} \n\n\n"
++        return 1
++      fi
+   fi
+   TMPSTR=`echo "$SCSISTR" | sed -n 's/.*Type: *\(.*\) *ANSI.*/\1/p'`
+   NTMPSTR="$(sed -e 's/[[:space:]]*$//' -e 's/^[[:space:]]*//' <<<${TMPSTR})"
+@@ -965,6 +975,7 @@
+     echo "--sparselun:     Tell kernel to support sparse LUN numbering"
+     echo "--update:        same as -u"
+     echo "--resize:        same as -s"
++    echo "--ignore-rev:    Ignore the revision change"
+     echo " Host numbers may thus be specified either directly on cmd line (deprecated) or"
+     echo " or with the --hosts=LIST parameter (recommended)."
+     echo "LIST: A[-B][,C[-D]]... is a comma separated list of single values and ranges"
+@@ -1016,6 +1027,7 @@
+ existing_targets=1
+ mp_enable=
+ declare -i scan_flags=0
++ignore_rev=0
+ 
+ # Scan options
+ opt="$1"
+@@ -1056,6 +1068,7 @@
+     -sparselun) scan_flags=$((scan_flags|0x40)) ;;
+     -update) update=1;;
+     -wide) opt_idsearch=`seq 0 15` ;;
++    -ignore-rev) ignore_rev=1;;
+     *) echo "Unknown option -$opt !" ;;
+   esac
+   shift

@@ -1,0 +1,12 @@
+diff -Nur sg3_utils-1.37_old/doc/sg_requests.8 sg3_utils-1.37/doc/sg_requests.8
+--- sg3_utils-1.37_old/doc/sg_requests.8	2012-12-22 11:05:14.000000000 +0800
++++ sg3_utils-1.37/doc/sg_requests.8	2018-07-17 20:48:10.968824402 +0800
+@@ -43,7 +43,7 @@
+ is reached or an error occurs. The default value for \fINUM\fR is 1 .
+ .TP
+ \fB\-p\fR, \fB\-\-progress\fR
+-show progress indication (a percentage) if available. If \fI\-\-number=NUM\fR
++show progress indication (a percentage) if available. If \fI\-\-num=NUM\fR
+ is given, \fINUM\fR is greater than 1 and an initial progress indication
+ was detected then this utility waits 30 seconds before subsequent checks.
+ Exits when \fINUM\fR is reached or there are no more progress indications.

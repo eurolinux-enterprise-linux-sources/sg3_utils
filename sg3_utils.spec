@@ -3,7 +3,7 @@
 Summary: Utilities for devices that use SCSI command sets
 Name: sg3_utils
 Version: 1.37
-Release: 12%{?dist}
+Release: 17%{?dist}
 License: GPLv2+ and BSD
 Group: Applications/System
 Source0: http://sg.danny.cz/sg/p/sg3_utils-%{version}.tgz
@@ -24,6 +24,12 @@ Patch7: sg3_utils-1.37-rescan-scsi-typo.patch
 Patch8: sg3_utils-1.37-rescan-scsi-missingoption.patch
 Patch9: BZ_1380744-rescan-scsi-bus.sh-Add-lunsearch-filter-to-searchexi.patch
 Patch10: BZ_1360915-rescan-scsi-bus.sh-Fixup-help-text-for-forcerescan.patch
+Patch11: sg3_utils_manpage_and_cli_help_message_fixes.patch
+Patch12: BZ_1400491_rescan-scsi-bus.sh_ignore_rev_change.patch
+Patch13: BZ_1359274_sg_logs_fix_inline_help.patch
+Patch14: BZ_1359282_sg_requests_fix_manpage.patch
+Patch15: BZ_1359286_sg_senddiag_fix_help.patch
+Patch16: BZ_1359292_sg_write_buffer_fix_help.patch
 URL: http://sg.danny.cz/sg/sg3_utils.html
 Requires: %{name}-libs = %{version}-%{release}
 
@@ -72,6 +78,12 @@ developing applications.
 %patch8 -p1 -b .missingopt
 %patch9 -p1 -b .rescan_all_lun
 %patch10 -p1 -b .help_forcerescan_forceremove
+%patch11 -p1 -b .help_and_man_fixes
+%patch12 -p1 -b .ignore_rev_change
+%patch13 -p1 -b .sg_log_inline_help
+%patch14 -p1 -b .sg_requests_man
+%patch15 -p1 -b .sg_senddiag_help
+%patch16 -p1 -b .sg_write_buffer_help
 
 %build
 %configure --disable-static
@@ -114,6 +126,24 @@ install -p -m 644 %{SOURCE2} $RPM_BUILD_ROOT%{_mandir}/man8
 
 
 %changelog
+* Tue Jul 17 2018 Gris Ge <fge@redhat.com> 1.37-17
+- Fix help documents of sg_requests, sg_senddiag and sg_write_buffer.
+  (RHBZ #1359282, #1359286, #1359292)
+
+* Mon Jul 16 2018 Gris Ge <fge@redhat.com> 1.37-16
+- Fix inline help of sg_logs. (RHBZ #1359274)
+
+* Tue Jun 19 2018 Gris Ge <fge@redhat.com> 1.37-15
+- Massive manapge and cli help message fixes.
+
+* Tue Jun 12 2018 Gris Ge <fge@redhat.com> 1.37-14
+- Add '--ignore-rev` option to rescan-scsi-bus.sh.
+  (RHBZ #1400491)
+
+* Tue Jun 12 2018 Gris Ge <fge@redhat.com> 1.37-13
+- Add missing short options of sg_test_rwbuf.
+  (RHBZ #1359289)
+
 * Wed May 10 2017 Gris Ge <fge@redhat.com> 1.37-12
 - Fix the manpage of `forceremove` and `forcerescan` command.
   (RHBZ #1360915)

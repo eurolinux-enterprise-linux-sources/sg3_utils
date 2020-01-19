@@ -1,0 +1,835 @@
+diff -Nur sg3_utils-1.37_old/doc/sg_compare_and_write.8 sg3_utils-1.37/doc/sg_compare_and_write.8
+--- sg3_utils-1.37_old/doc/sg_compare_and_write.8	2013-08-26 05:30:30.000000000 +0800
++++ sg3_utils-1.37/doc/sg_compare_and_write.8	2018-06-19 19:52:13.949811015 +0800
+@@ -76,6 +76,9 @@
+ just the compare buffer (when the \fI\-\-inw=WF\fR option is given). If
+ \fIIF\fR is '\-' then stdin (e.g. a pipe) is read.
+ .TP
++\fB\-C\fR, \fB\-\-inc\fR=\fIIF\fR
++The same as the \fB\-\-in\fR option.
++.TP
+ \fB\-D\fR, \fB\-\-inw\fR=\fIWF\fR
+ read data (binary) from file named \fIWF\fR. This will the write buffer
+ that will become the second half of the data-out buffer sent to the
+diff -Nur sg3_utils-1.37_old/doc/sginfo.8 sg3_utils-1.37/doc/sginfo.8
+--- sg3_utils-1.37_old/doc/sginfo.8	2018-06-19 19:51:43.652097867 +0800
++++ sg3_utils-1.37/doc/sginfo.8	2018-06-19 19:52:13.951810798 +0800
+@@ -206,7 +206,7 @@
+ Display output values in a list. Make them suitable for editing and
+ being given back to the '\-R' (replace command).
+ .TP
+-\fB\\-R\fR
++\fB\-R\fR
+ Replace parameters \- best used with \-X (expert use only)
+ .SH CHANGING MODE PAGE PARAMETERS
+ Firstly you should know what you are doing before changing existing
+diff -Nur sg3_utils-1.37_old/doc/sg_inq.8 sg3_utils-1.37/doc/sg_inq.8
+--- sg3_utils-1.37_old/doc/sg_inq.8	2013-05-08 21:21:30.000000000 +0800
++++ sg3_utils-1.37/doc/sg_inq.8	2018-06-19 19:52:13.951810798 +0800
+@@ -129,7 +129,7 @@
+ utilities.
+ .TP
+ \fB\-O\fR, \fB\-\-old\fR
+-switch to older style options.
++Switch to older style options. Please use as first option.
+ .TP
+ \fB\-p\fR, \fB\-\-page\fR=\fIPG\fR
+ the \fIPG\fR argument can be either a number of an abbreviation for a VPD
+@@ -297,8 +297,8 @@
+ decodes the Mode page policy VPD page [0x87].  Equivalent to '\-\-page=mpp'
+ in the main description.
+ .TP
+-\fB\-N\fR
+-switch to the newer style options.
++\fB-N\fR, \fB\-\-new\fR
++Switch to the newer style options.
+ .TP
+ \fB\-o\fR=\fIOPCODE_PG\fR
+ used in conjunction with the \fI\-e\fR or \fI\-c\fR option. If neither given
+diff -Nur sg3_utils-1.37_old/doc/sg_logs.8 sg3_utils-1.37/doc/sg_logs.8
+--- sg3_utils-1.37_old/doc/sg_logs.8	2013-07-02 12:21:40.000000000 +0800
++++ sg3_utils-1.37/doc/sg_logs.8	2018-06-19 19:52:13.951810798 +0800
+@@ -91,7 +91,7 @@
+ is meant to be relatively easy to parse.
+ .TP
+ \fB\-O\fR, \fB\-\-old\fR
+-switch to older style options.
++Switch to older style options. Please use as first option.
+ .TP
+ \fB\-p\fR, \fB\-\-page\fR=\fIPG[,SPG]\fR
+ log page code to access. \fIPG\fR is expected to be a decimal number between
+@@ -285,8 +285,8 @@
+ \fB\-n\fR
+ Equivalent to \fI\-\-name\fR in the main description.
+ .TP
+-\fB\-N\fR
+-switch to the newer style options.
++\fB\-N\fR, \fB\-\-new\fR
++Switch to the newer style options. Enabeld by default.
+ .TP
+ \fB\-p\fR=\fIPG[,SPG]\fR
+ \fIPG\fR is the log page code to access. Should be a hexadecimal number
+diff -Nur sg3_utils-1.37_old/doc/sg_modes.8 sg3_utils-1.37/doc/sg_modes.8
+--- sg3_utils-1.37_old/doc/sg_modes.8	2012-12-22 11:05:14.000000000 +0800
++++ sg3_utils-1.37/doc/sg_modes.8	2018-06-19 19:52:13.951810798 +0800
+@@ -128,7 +128,7 @@
+ for MODE SENSE (6).
+ .TP
+ \fB\-O\fR, \fB\-\-old\fR
+-switch to older style options.
++Switch to older style options. Please use as first option.
+ .TP
+ \fB\-p\fR, \fB\-\-page\fR=\fIPG\fR
+ page code to fetch. The \fIPG\fR is assumed to be a decimal value unless
+@@ -227,8 +227,8 @@
+ \fB\-L\fR
+ see \fB\-\-llbaa\fR in the main description.
+ .TP
+-\fB\-N\fR
+-switch to the newer style options.
++\fB-N\fR, \fB\-\-new\fR
++Switch to the newer style options.
+ .TP
+ \fB\-m\fR=\fILEN\fR
+ see \fB\-\-maxlen\fR=\fILEN\fR in the main description.
+diff -Nur sg3_utils-1.37_old/doc/sg_opcodes.8 sg3_utils-1.37/doc/sg_opcodes.8
+--- sg3_utils-1.37_old/doc/sg_opcodes.8	2012-12-22 11:05:14.000000000 +0800
++++ sg3_utils-1.37/doc/sg_opcodes.8	2018-06-19 19:52:13.951810798 +0800
+@@ -64,7 +64,7 @@
+ is given then that summary is not printed on stdout.
+ .TP
+ \fB\-O\fR, \fB\-\-old\fR
+-switch to older style options.
++Switch to older style options. Please use as first option.
+ .TP
+ \fB\-o\fR, \fB\-\-opcode\fR=\fIOP\fR
+ the \fIDEVICE\fR will be queried for the given operation code ( i.e. the
+@@ -144,8 +144,8 @@
+ \fB\-n\fR
+ don't print a summary of the SCSI INQUIRY response on stdout.
+ .TP
+-\fB\-N\fR
+-switch to the newer style options.
++\fB-N\fR, \fB\-\-new\fR
++Switch to the newer style options.
+ .TP
+ \fB\-o\fR=\fIOP\fR
+ the \fIDEVICE\fR will be queried for the given operation code (i.e.
+diff -Nur sg3_utils-1.37_old/doc/sg_rbuf.8 sg3_utils-1.37/doc/sg_rbuf.8
+--- sg3_utils-1.37_old/doc/sg_rbuf.8	2012-02-11 07:09:25.000000000 +0800
++++ sg3_utils-1.37/doc/sg_rbuf.8	2018-06-19 19:52:13.962809605 +0800
+@@ -4,7 +4,7 @@
+ .SH SYNOPSIS
+ .B sg_rbuf
+ [\fI\-\-buffer=EACH\fR] [\fI\-\-dio\fR] [\fI\-\-help\fR] [\fI\-\-mmap\fR]
+-[\fI\-\-quick\fR] [\fI\-\-size=OVERALL\fR] [\fI\-\-test\fR]
++[\fI\-\-quick\fR] [\fI\-\-size=OVERALL\fR]
+ [\fI\-\-verbose\fR] [\fI\-\-version\fR] \fIDEVICE\fR
+ .PP
+ .B sg_rbuf
+@@ -53,7 +53,7 @@
+ directly into user memory. This will eliminate the copy via kernel buffers.
+ .TP
+ \fB\-O\fR, \fB\-\-old\fR
+-switch to older style options.
++Switch to older style options. Please use as first option.
+ .TP
+ \fB\-q\fR, \fB\-\-quick\fR
+ only transfer the data into kernel buffers (typically by DMA from the SCSI
+@@ -143,8 +143,8 @@
+ use memory mapped IO if available. Equivalent to the \fI\-\-mmap\fR option
+ in the main description.
+ .TP
+-\fB\-N\fR
+-switch to the newer style options.
++\fB-N\fR, \fB\-\-new\fR
++Switch to the newer style options.
+ .TP
+ \fB\-q\fR
+ only transfer the data into kernel buffers (typically by DMA from
+diff -Nur sg3_utils-1.37_old/doc/sg_readcap.8 sg3_utils-1.37/doc/sg_readcap.8
+--- sg3_utils-1.37_old/doc/sg_readcap.8	2013-05-18 09:50:52.000000000 +0800
++++ sg3_utils-1.37/doc/sg_readcap.8	2018-06-19 19:52:13.951810798 +0800
+@@ -80,7 +80,7 @@
+ of 0xffffffff is returned (if the device complies with SBC\-2 or later).
+ .TP
+ \fB\-O\fR, \fB\-\-old\fR
+-switch to older style options.
++Switch to older style options. Please use as first option.
+ .TP
+ \fB\-p\fR, \fB\-\-pmi\fR
+ partial medium indicator: for finding the next block address prior to
+@@ -136,8 +136,8 @@
+ will yield the last block address after \fILBA\fR prior to a delay.
+ Equivalent to \fI\-\-lba=LBA\fR in the main description.
+ .TP
+-\fB\-N\fR
+-switch to the newer style options.
++\fB-N\fR, \fB\-\-new\fR
++Switch to the newer style options.
+ .TP
+ \fB\-pmi\fR
+ partial medium indicator: for finding the next block address prior to
+diff -Nur sg3_utils-1.37_old/doc/sg_reassign.8 sg3_utils-1.37/doc/sg_reassign.8
+--- sg3_utils-1.37_old/doc/sg_reassign.8	2012-11-25 07:13:16.000000000 +0800
++++ sg3_utils-1.37/doc/sg_reassign.8	2018-06-19 19:52:13.961809714 +0800
+@@ -4,7 +4,7 @@
+ .SH SYNOPSIS
+ .B sg_reassign
+ [\fI\-\-address=A,A...\fR] [\fI\-\-dummy\fR] [\fI\-\-eight=0|1\fR]
+-[\fI\-\-grown\fR] [\fI\-\-help\fR] [\fI\-\-longlist=0|1\fR]
++[\fI\-\-grown\fR] [\fI\-\-help\fR] [\fI\-\-longlist=0|1\fR] [\fI\-\-hex\fR]
+ [\fI\-\-primary\fR] [\fI\-\-verbose\fR] [\fI\-\-version\fR] \fIDEVICE\fR
+ .SH DESCRIPTION
+ .\" Add any additional description here
+@@ -84,6 +84,10 @@
+ the \fI\-\-address=\fR option is not permitted. This list is sometimes
+ referred to as the PLIST.
+ .TP
++\fB\-H\fR, \fB\-\-hex\fR
++print response in hex (for \fB\-g\fR, \fB\-\-grown\fR or
++\fB\-p\fR, \fB\-\-primary\fR)
++.TP
+ \fB\-v\fR, \fB\-\-verbose\fR
+ increase the level of verbosity, (i.e. debug output).
+ .TP
+diff -Nur sg3_utils-1.37_old/doc/sg_reset.8 sg3_utils-1.37/doc/sg_reset.8
+--- sg3_utils-1.37_old/doc/sg_reset.8	2013-08-26 05:30:30.000000000 +0800
++++ sg3_utils-1.37/doc/sg_reset.8	2018-06-19 19:52:13.960809822 +0800
+@@ -42,7 +42,7 @@
+ attempt a SCSI device reset. This would typically involve sending a LOGICAL
+ UNIT RESET task management function to \fIDEVICE\fR.
+ .TP
+-\fB\-h\fR, \fB\-\-help\fR
++\fB\-z\fR, \fB\-\-help\fR
+ print the usage message then exit.
+ .TP
+ \fB\-H\fR, \fB\-\-host\fR
+@@ -57,6 +57,9 @@
+ option only the requested reset is attempted. An alternate option name of
+ \fI\-\-no-escalate\fR is also accepted.
+ .TP
++\fB\-\-no\-escalate\fR
++The same as \fB\-N\fR, \fB\-\-no\-esc\fR.
++.TP
+ \fB\-t\fR, \fB\-\-target\fR
+ attempt a SCSI target reset. A SCSI target contains one or more LUs. This
+ would typically involve sending a I_T NEXUS RESET task management function
+diff -Nur sg3_utils-1.37_old/doc/sg_sat_identify.8 sg3_utils-1.37/doc/sg_sat_identify.8
+--- sg3_utils-1.37_old/doc/sg_sat_identify.8	2013-06-29 01:44:32.000000000 +0800
++++ sg3_utils-1.37/doc/sg_sat_identify.8	2018-06-19 20:03:44.802468384 +0800
+@@ -5,7 +5,7 @@
+ .SH SYNOPSIS
+ .B sg_sat_identify
+ [\fI\-\-ck_cond\fR] [\fI\-\-extend\fR] [\fI\-\-help\fR] [\fI\-\-hex\fR]
+-[\fI\-\-indent\fR] [\fI\-\-len=\fR{16|12}] [\fI\-\-packet\fR] [\fI\-\-raw\fR]
++[\fI\-\-ident\fR] [\fI\-\-len=\fR{16|12}] [\fI\-\-packet\fR] [\fI\-\-raw\fR]
+ [\fI\-\-verbose\fR] [\fI\-\-version\fR] \fIDEVICE\fR
+ .SH DESCRIPTION
+ .\" Add any additional description here
+@@ -54,7 +54,7 @@
+ 16 bit words, in a format that is acceptable for 'hdparm \-\-Istdin' to
+ process.
+ .TP
+-\fB\-i\fR, \fB\-\-indent\fR
++\fB\-i\fR, \fB\-\-ident\fR
+ outputs the World Wide Name (WWN) of the device. This should be a NAA\-5
+ 64 bit number. It is output in hex prefixed with "0x". If not available
+ then "0x0000000000000000" is output. The equivalent for a SCSI disk (i.e. its
+diff -Nur sg3_utils-1.37_old/doc/sg_senddiag.8 sg3_utils-1.37/doc/sg_senddiag.8
+--- sg3_utils-1.37_old/doc/sg_senddiag.8	2012-02-11 07:09:25.000000000 +0800
++++ sg3_utils-1.37/doc/sg_senddiag.8	2018-06-19 19:52:13.951810798 +0800
+@@ -58,7 +58,7 @@
+ by this utility, are listed.
+ .TP
+ \fB\-O\fR, \fB\-\-old\fR
+-switch to older style options.
++Switch to older style options. Please use as first option.
+ .TP
+ \fB\-p\fR, \fB\-\-pf\fR
+ set Page Format (PF) bit. By default it is clear (i.e. 0) unless the
+@@ -186,8 +186,8 @@
+ argument then a list of diagnostic page names and their numbers, known
+ by this utility, are listed.
+ .TP
+-\fB\-N\fR
+-switch to the newer style options.
++\fB-N\fR, \fB\-\-new\fR
++Switch to the newer style options.
+ .TP
+ \fB\-pf\fR
+ set Page Format (PF) bit. By default it is clear (i.e. 0) unless
+diff -Nur sg3_utils-1.37_old/doc/sg_start.8 sg3_utils-1.37/doc/sg_start.8
+--- sg3_utils-1.37_old/doc/sg_start.8	2012-11-21 08:39:11.000000000 +0800
++++ sg3_utils-1.37/doc/sg_start.8	2018-06-19 19:52:13.951810798 +0800
+@@ -92,7 +92,7 @@
+ media. This 'noflush' field in the cdb was added after sbc3r13.
+ .TP
+ \fB\-O\fR, \fB\-\-old\fR
+-switch to older style options.
++Switch to older style options. Please use as first option.
+ .TP
+ \fB\-p\fR, \fB\-\-pc\fR=\fIPC\fR
+ where \fIPC\fR is the 'power conditions' value. 0 to 15 (inclusive) are valid.
+@@ -221,8 +221,8 @@
+ action differs from the new interface in which the option of this name
+ defaults to load and start.]
+ .TP
+-\fB\-N\fR
+-switch to the newer style options.
++\fB-N\fR, \fB\-\-new\fR
++Switch to the newer style options.
+ .TP
+ \fB\-\-mod\fR=\fIPC_MOD\fR
+ where \fIPC_MOD\fR is the 'power condition modifier' value. 0 to 15 (inclusive)
+diff -Nur sg3_utils-1.37_old/doc/sg_turs.8 sg3_utils-1.37/doc/sg_turs.8
+--- sg3_utils-1.37_old/doc/sg_turs.8	2012-12-22 11:05:14.000000000 +0800
++++ sg3_utils-1.37/doc/sg_turs.8	2018-06-19 19:52:13.951810798 +0800
+@@ -35,7 +35,7 @@
+ number may be given, prefixed by either '0x' or has a trailing 'h'.
+ .TP
+ \fB\-O\fR, \fB\-\-old\fR
+-switch to older style options.
++Switch to older style options. Please use as first option.
+ .TP
+ \fB\-p\fR, \fB\-\-progress\fR
+ show progress indication (a percentage) if available. If \fI\-\-number=NUM\fR
+@@ -85,8 +85,8 @@
+ performs TEST UNIT READY \fINUM\fR times. If not given defaults to 1.
+ Equivalent to \fI\-\-number=NUM\fR in the main description.
+ .TP
+-\fB\-N\fR
+-switch to the newer style options.
++\fB-N\fR, \fB\-\-new\fR
++Switch to the newer style options.
+ .TP
+ \fB\-p\fR
+ show progress indication (a percentage) if available.
+diff -Nur sg3_utils-1.37_old/doc/sg_verify.8 sg3_utils-1.37/doc/sg_verify.8
+--- sg3_utils-1.37_old/doc/sg_verify.8	2013-08-26 05:30:30.000000000 +0800
++++ sg3_utils-1.37/doc/sg_verify.8	2018-06-19 19:52:13.951810798 +0800
+@@ -5,7 +5,7 @@
+ .B sg_verify
+ [\fI\-\-16\fR] [\fI\-\-bpc=BPC\fR] [\fI\-\-count=COUNT\fR] [\fI\-\-dpo\fR]
+ [\fI\-\-ebytchk=BCH\fR] [\fI\-\-group=GN\fR] [\fI\-\-help\fR]
+-[\fI\-\-in=IF\fR] [\fI\-\-lba=LBA\fR] [\fI\-\-ndo=NDO\fR] [\fI\-\-quiet\fR]
++[\fI\-\-in=IF\fR] [\fI\-\-lba=LBA\fR] [\fI\-\-nbo=NBO\fR] [\fI\-\-quiet\fR]
+ [\fI\-\-readonly\fR] [\fI\-\-verbose\fR] [\fI\-\-version\fR]
+ [\fI\-\-vrprotect=VRP\fR] \fIDEVICE\fR
+ .SH DESCRIPTION
+@@ -15,7 +15,7 @@
+ commands are defined in the SBC\-2 (draft) standard at http://www.t10.org and
+ SBC\-3 drafts.
+ .PP
+-When \fI\-\-ndo=NDO\fR is not given then the verify starts at the logical
++When \fI\-\-nbo=NBO\fR is not given then the verify starts at the logical
+ block address given by the \fI\-\-lba=LBA\fR option and continues for
+ \fI\-\-count=COUNT\fR blocks. No more than \fI\-\-bpc=BPC\fR blocks are
+ verified by each VERIFY command so if necessary multiple VERIFY commands are
+@@ -24,11 +24,11 @@
+ block contents). No news is good news (i.e. if there are no verify errors
+ detected then no messages are sent to stderr and the Unix exit status is 0).
+ .PP
+-When \fI\-\-ndo=NDO\fR is given then the \fI\-\-bpc=BPC\fR option is
++When \fI\-\-nbo=NBO\fR is given then the \fI\-\-bpc=BPC\fR option is
+ ignored. A single VERIFY command is issued and a comparison starts at the
+ logical block address given by the \fI\-\-lba=LBA\fR option and continues for
+ \fI\-\-count=COUNT\fR blocks. The VERIFY command has an associated data\-out
+-buffer that is \fINDO\fR bytes long. The contents of the data\-out buffer are
++buffer that is \fINBO\fR bytes long. The contents of the data\-out buffer are
+ obtained from the \fIFN\fR file (if \fI\-\-in=FN\fR is given) or from stdin.
+ A comparison takes place between data\-out buffer and the logical blocks
+ on the \fIDEVICE\fR. If the comparison is good then no messages are sent to
+@@ -51,7 +51,7 @@
+ to issue a VERIFY(16) command.
+ .TP
+ \fB\-b\fR, \fB\-\-bpc\fR=\fIBPC\fR
+-this option is ignored if \fI\-\-ndo=NDO\fR is given. Otherwise \fIBPC\fR
++this option is ignored if \fI\-\-nbo=NBO\fR is given. Otherwise \fIBPC\fR
+ specifies the maximum number of blocks that will be verified by a single SCSI
+ VERIFY command. The default value is 128 blocks which equates to 64 KB for a
+ disk with 512 byte blocks. If \fIBPC\fR is less than \fICOUNT\fR then
+@@ -64,7 +64,7 @@
+ \fB\-c\fR, \fB\-\-count\fR=\fICOUNT\fR
+ where \fICOUNT\fR specifies the number of blocks to verify. The default value
+ is 1 . If \fICOUNT\fR is greater than \fIBPC\fR (or its default value of 128)
+-and \fINDO\fR is not given, 0 or less then multiple SCSI VERIFY commands are
++and \fINBO\fR is not given, 0 or less then multiple SCSI VERIFY commands are
+ sent to the device. Otherwise \fICOUNT\fR becomes the contents of the
+ verification length field of the SCSI VERIFY command issued. The
+ .B sg_readcap
+@@ -78,10 +78,10 @@
+ .TP
+ \fB\-E\fR, \fB\-\-ebytchk\fR=\fIBCH\fR
+ sets the BYTCHK field to \fIBCH\fR overriding the value (1) set by the
+-\fI\-\-ndo=NDO\fR option. Values of 1, 2 or 3 are accepted for \fIBCH\fR
++\fI\-\-nbo=NBO\fR option. Values of 1, 2 or 3 are accepted for \fIBCH\fR
+ however sbc3r34 reserves the value 2. If this option is given then
+-\fI\-\-ndo=NDO\fR must also be given. If \fIBCH\fR is 3 then \fICOUNT\fR
+-must be 1 and \fINDO\fR should be the size of one logical block (plus the
++\fI\-\-nbo=NBO\fR must also be given. If \fIBCH\fR is 3 then \fICOUNT\fR
++must be 1 and \fINBO\fR should be the size of one logical block (plus the
+ size of some or all of the protection infomation if \fIVRP\fR is greater
+ than 0).
+ .TP
+@@ -94,9 +94,9 @@
+ output the usage message then exit.
+ .TP
+ \fB\-i\fR, \fB\-\-in\fR=\fIIF\fR
+-where \fIIF\fR is the name of a file from which \fINDO\fR bytes will be read
++where \fIIF\fR is the name of a file from which \fINBO\fR bytes will be read
+ and placed in the data\-out buffer. This is only done when the
+-\fI\-\-ndo=NDO\fR option is given. If this option is not given then stdin
++\fI\-\-nbo=NBO\fR option is given. If this option is not given then stdin
+ is read. If \fIIF\fR is "\-" then stdin is also used.
+ .TP
+ \fB\-l\fR, \fB\-\-lba\fR=\fILBA\fR
+@@ -105,12 +105,12 @@
+ by '0x' or a trailing 'h' (see below). The default value is 0 (i.e. the start
+ of the device).
+ .TP
+-\fB\-n\fR, \fB\-\-ndo\fR=\fINDO\fR
+-\fINDO\fR is the number of bytes to obtain from the \fIFN\fR file (if
++\fB\-n\fR, \fB\-\-nbo\fR=\fINBO\fR
++\fINBO\fR is the number of bytes to obtain from the \fIFN\fR file (if
+ \fI\-\-in=FN\fR is given) or from stdin. Those bytes are placed in the
+-data\-out buffer associated with the SCSI VERIFY command and \fINDO\fR
++data\-out buffer associated with the SCSI VERIFY command and \fINBO\fR
+ is placed in the verification length field in the cdb. The default value
+-for \fINDO\fR is 0 and the maximum value is dependant on the OS. If the
++for \fINBO\fR is 0 and the maximum value is dependant on the OS. If the
+ \fI\-\-ebytchk=BCH\fR option is not given then the BYTCHK field in the cdb
+ is set to 1.
+ .TP
+@@ -138,13 +138,13 @@
+ BYTCHK is the name of a field (two bits wide) in the VERIFY(10) and
+ VERIFY(16) commands. When set to 1 or 3 (sbc3r34 reserves the value 2) it
+ indicates that associated with the SCSI VERIFY command, a data\-out buffer
+-will be sent for the device (disk) to check. Using the \fI\-\-ndo=NDO\fR
+-option sets the BYTCHK field to 1 and \fINDO\fR is the number of bytes
++will be sent for the device (disk) to check. Using the \fI\-\-nbo=NBO\fR
++option sets the BYTCHK field to 1 and \fINBO\fR is the number of bytes
+ placed in the data\-out buffer. Those bytes are obtained from stdin or
+ \fIIF\fR (from the \fI\-\-in=FN\fR option). The \fI\-\-ebytchk=BCH\fR
+ option may be used to override the BYTCHK field value of 1 with \fIBCH\fR.
+ .PP
+-The calculation of \fINDO\fR is left up to the user. Its value depends
++The calculation of \fINBO\fR is left up to the user. Its value depends
+ on the logical block size (which can be found with the sg_readcap utility),
+ the \fICOUNT\fR and the \fIVRP\fR values. If the \fIVRP\fR is greater than
+ 0 then each logical block will contain an extra 8 bytes (at least) of
+@@ -159,12 +159,12 @@
+ data\-out (and data\-in) buffer. For Linux at one time the limit was
+ less than 1 MB but has been increased somewhat.
+ .SH OPTION CHANGES
+-Earlier versions of this utility had a \fI\-\-bytchk=NDO\fR option which
+-set the BYTCHK bit and set the cdb verification length field to \fINDO\fR.
+-The shorter form of that option was \fI\-B NDO\fR. For backward
++Earlier versions of this utility had a \fI\-\-bytchk=NBO\fR option which
++set the BYTCHK bit and set the cdb verification length field to \fINBO\fR.
++The shorter form of that option was \fI\-B NBO\fR. For backward
+ compatibility that option is still present but not documented. In its place
+-is the \fI\-\-ndo=NDO\fR whose shorter form of \fI\-n NDO\fR.
+-\fI\-\-ndo=NDO\fR sets the BYTCHK field to 1 unless that is overridden by
++is the \fI\-\-nbo=NBO\fR whose shorter form of \fI\-n NBO\fR.
++\fI\-\-nbo=NBO\fR sets the BYTCHK field to 1 unless that is overridden by
+ the \fI\-\-ebytchk=BCH\fR.
+ .SH NOTES
+ Various numeric arguments (e.g. \fILBA\fR) may include multiplicative
+diff -Nur sg3_utils-1.37_old/doc/sg_xcopy.8 sg3_utils-1.37/doc/sg_xcopy.8
+--- sg3_utils-1.37_old/doc/sg_xcopy.8	2013-10-08 22:24:59.000000000 +0800
++++ sg3_utils-1.37/doc/sg_xcopy.8	2018-06-19 19:52:13.951810798 +0800
+@@ -75,6 +75,9 @@
+ \fBconv\fR=\fBCONV\fR
+ all \fBCONV\fR arguments are ignored.
+ .TP
++\fBapp\fR=\fBAPPEND\fR
++all \fBAPPEND\fR arguments are ignored.
++.TP
+ \fBcount\fR=\fICOUNT\fR
+ copy \fICOUNT\fR blocks from \fIIFILE\fR to \fIOFILE\fR. Default is the
+ minimum (\fIIFILE\fR if \fIdc=0\fR or \fIOFILE\fR if \fIdc=1\fR)
+diff -Nur sg3_utils-1.37_old/scripts/scsi_mandat sg3_utils-1.37/scripts/scsi_mandat
+--- sg3_utils-1.37_old/scripts/scsi_mandat	2013-05-15 21:35:46.000000000 +0800
++++ sg3_utils-1.37/scripts/scsi_mandat	2018-06-19 19:52:13.949811015 +0800
+@@ -42,10 +42,10 @@
+ usage()
+ {
+   echo "Usage: scsi_mandat [-h] [-L] [-q] [-v] <device>"
+-  echo "  where:  -h    print usage message"
+-  echo "          -L, --log        append stderr to 'scsi_mandat.err'"
+-  echo "          -q    suppress some output"
+-  echo "          -v    increase verbosity of output"
++  echo "  where:  -h, --help        print usage message"
++  echo "          -L, --log         append stderr to 'scsi_mandat.err'"
++  echo "          -q, --quiet       suppress some output"
++  echo "          -v, --verbose     increase verbosity of output"
+   echo ""
+   echo "Check <device> for manadatory SCSI command support"
+ }
+@@ -71,7 +71,7 @@
+   then
+     usage
+     exit 1
+-fi 
++fi
+ 
+ for command in "sg_inq" "sg_luns" "sg_turs" "sg_requests" "sg_vpd" \
+                 "sg_vpd -i" "sg_senddiag -t"
+diff -Nur sg3_utils-1.37_old/src/sg_compare_and_write.c sg3_utils-1.37/src/sg_compare_and_write.c
+--- sg3_utils-1.37_old/src/sg_compare_and_write.c	2013-08-26 05:30:30.000000000 +0800
++++ sg3_utils-1.37/src/sg_compare_and_write.c	2018-06-19 19:52:13.951810798 +0800
+@@ -114,11 +114,12 @@
+         fprintf(stderr, "Usage: "
+                 "sg_compare_and_write [--dpo] [--fua] [--fua_nv] "
+                 "[--group=GN] [--help]\n"
+-                "                            --in=IF [--inw=WF] --lba=LBA "
++                "                            --in=IF|--inc=IF [--inw=WF] "
++                "--lba=LBA "
+                 "[--num=NUM]\n"
+                 "                            [--quiet] [--timeout=TO] "
+                 "[--verbose] [--version]\n"
+-                "                            [--wrpotect=WP] [--xferlen=LEN] "
++                "                            [--wrprotect=WP] [--xferlen=LEN] "
+                 "DEVICE\n"
+                 "  where:\n"
+                 "    --dpo|-d            set the dpo bit in cdb (def: "
+@@ -135,6 +136,7 @@
+                 "                        optionally a write buffer (when "
+                 "--inw=WF is\n"
+                 "                        not given)\n"
++                "    --inc=IF|-C IF      The same as the --in option\n"
+                 "    --inw=WF|-D WF      WF is a file containing a write "
+                 "buffer\n"
+                 "    --lba=LBA|-l LBA    LBA of the first block of the "
+diff -Nur sg3_utils-1.37_old/src/sg_inq.c sg3_utils-1.37/src/sg_inq.c
+--- sg3_utils-1.37_old/src/sg_inq.c	2018-06-19 19:51:43.677095155 +0800
++++ sg3_utils-1.37/src/sg_inq.c	2018-06-19 19:52:13.951810798 +0800
+@@ -285,6 +285,7 @@
+             "inquiry\n"
+             "    --verbose|-v    increase verbosity\n"
+             "    --version|-V    print version string then exit\n"
++            "    --old|-O        use old interface (use as first option)\n"
+             "    --vpd|-e        vital product data (set page with "
+             "'--page=PG')\n\n"
+             "Performs a SCSI INQUIRY command. "
+@@ -345,6 +346,7 @@
+             "    -V    output version string\n"
+             "    -x    decode extended INQUIRY data VPD page (0x86)\n"
+             "    -36   perform standard INQUIRY with a 36 byte response\n"
++            "    -N|--new   use new interface\n"
+             "    -?    output this usage message\n\n"
+             "If no options given then does a standard SCSI INQUIRY\n");
+ }
+diff -Nur sg3_utils-1.37_old/src/sg_logs.c sg3_utils-1.37/src/sg_logs.c
+--- sg3_utils-1.37_old/src/sg_logs.c	2013-07-31 07:58:53.000000000 +0800
++++ sg3_utils-1.37/src/sg_logs.c	2018-06-19 19:53:56.318072013 +0800
+@@ -169,6 +169,7 @@
+            "    --transport|-T    decode transport (protocol specific port "
+            "0x18) log page\n"
+            "    --verbose|-v    increase verbosity\n"
++           "    -N|--new    use new interface\n"
+            "    --version|-V    output version string then exit\n\n"
+            "Performs a SCSI LOG SENSE (or LOG SELECT) command and decodes "
+            "the response.\n");
+diff -Nur sg3_utils-1.37_old/src/sg_modes.c sg3_utils-1.37/src/sg_modes.c
+--- sg3_utils-1.37_old/src/sg_modes.c	2013-06-05 04:33:26.000000000 +0800
++++ sg3_utils-1.37/src/sg_modes.c	2018-06-19 19:52:13.951810798 +0800
+@@ -131,6 +131,7 @@
+            "    --six|-6        use MODE SENSE(6), by default uses MODE "
+            "SENSE(10)\n"
+            "    --verbose|-v    increase verbosity\n"
++           "    --old|-O        use old interface (use as first option)\n"
+            "    --version|-V    output version string then exit\n\n"
+            "Performs a SCSI MODE SENSE (10 or 6) command. To access and "
+            "possibly change\nmode page fields see the sdparm utility.\n");
+@@ -171,6 +172,7 @@
+            "   -v    verbose\n"
+            "   -V    output version string\n"
+            "   -6    Use MODE SENSE(6), by default uses MODE SENSE(10)\n"
++           "   -N|--new     use new interface\n"
+            "   -?    output this usage message\n\n"
+            "Performs a SCSI MODE SENSE (10 or 6) command\n");
+ }
+diff -Nur sg3_utils-1.37_old/src/sg_opcodes.c sg3_utils-1.37/src/sg_opcodes.c
+--- sg3_utils-1.37_old/src/sg_opcodes.c	2013-05-18 09:50:52.000000000 +0800
++++ sg3_utils-1.37/src/sg_opcodes.c	2018-06-19 19:52:13.951810798 +0800
+@@ -124,6 +124,7 @@
+             "                     (def: sort by opcode (then service "
+             "action))\n"
+             "    --verbose|-v    increase verbosity\n"
++            "    --old|-O        use old interface (use as first option)\n"
+             "    --version|-V    print version string then exit\n\n"
+             "Performs a SCSI REPORT SUPPORTED OPERATION CODES or a REPORT "
+             "SUPPORTED\nTASK MANAGEMENT FUNCTIONS command\n");
+@@ -151,6 +152,7 @@
+             "    -u    output list of operation codes as is (unsorted)\n"
+             "    -v    verbose\n"
+             "    -V    output version string\n"
++            "    -N|--new   use new interface\n"
+             "    -?    output this usage message\n\n"
+             "Performs a SCSI REPORT SUPPORTED OPERATION CODES (or a REPORT "
+             "TASK MANAGEMENT\nFUNCTIONS) command\n");
+diff -Nur sg3_utils-1.37_old/src/sg_rbuf.c sg3_utils-1.37/src/sg_rbuf.c
+--- sg3_utils-1.37_old/src/sg_rbuf.c	2013-10-15 03:29:37.000000000 +0800
++++ sg3_utils-1.37/src/sg_rbuf.c	2018-06-19 19:52:13.951810798 +0800
+@@ -101,6 +101,7 @@
+             "                    default: 200 MiB\n"
+             "    --time|-t       time the data transfer\n"
+             "    --verbose|-v    increase verbosity (more debug)\n"
++            "    --old|-O        use old interface (use as first option)\n"
+             "    --version|-V    print version string then exit\n\n"
+             "Use SCSI READ BUFFER command (data mode, buffer id 0) "
+             "repeatedly\n");
+@@ -121,6 +122,7 @@
+     printf("             maximum total size is 4000 MiB\n");
+     printf("    -t       time the data transfer\n");
+     printf("    -v       increase verbosity (more debug)\n");
++    printf("    -N|--new use new interface\n");
+     printf("    -V       print version string then exit\n\n");
+     printf("Use SCSI READ BUFFER command (data mode, buffer id 0) "
+            "repeatedly\n");
+diff -Nur sg3_utils-1.37_old/src/sg_readcap.c sg3_utils-1.37/src/sg_readcap.c
+--- sg3_utils-1.37_old/src/sg_readcap.c	2013-05-08 21:21:30.000000000 +0800
++++ sg3_utils-1.37/src/sg_readcap.c	2018-06-19 19:54:44.244187218 +0800
+@@ -93,6 +93,7 @@
+             "    --raw|-r        output response in binary to stdout\n"
+             "    --verbose|-v    increase verbosity\n"
+             "    --version|-V    print version string and exit\n\n"
++            "    --old|-O        use old interface (use as first option)\n"
+             "Perform a SCSI READ CAPACITY (10 or 16) command\n");
+ }
+ 
+@@ -118,6 +119,7 @@
+             "    -r     output response in binary to stdout\n"
+             "    -v     increase verbosity\n"
+             "    -V     print version string and exit\n\n"
++            "    -N|--new   use new interface\n"
+             "Perform a SCSI READ CAPACITY command\n");
+ }
+ 
+diff -Nur sg3_utils-1.37_old/src/sg_reset.c sg3_utils-1.37/src/sg_reset.c
+--- sg3_utils-1.37_old/src/sg_reset.c	2013-05-08 21:21:30.000000000 +0800
++++ sg3_utils-1.37/src/sg_reset.c	2018-06-19 20:04:30.988100021 +0800
+@@ -68,7 +68,7 @@
+ {
+     fprintf(stderr, "Usage: "
+             "sg_reset [--bus] [--device] [--help] [--host] [--no-esc] "
+-            "[--target]\n"
++            "[--target] [--no-escalate]\n"
+             "                [--verbose] [--version] DEVICE\n"
+             "  where:\n"
+             "    --bus|-b        SCSI bus reset (SPI concept), might be all "
+@@ -89,6 +89,7 @@
+             "    --target|-t     target reset. The target holds the DEVICE "
+             "and perhaps\n"
+             "                    other LUs\n"
++            "    --no-escalate   The same as --no-esc|-N"
+             "    --verbose|-v    increase the level of verbosity\n"
+             "    --version|-V    print version number then exit\n\n"
+             "Use SG_SCSI_RESET ioctl to send a reset to the "
+diff -Nur sg3_utils-1.37_old/src/sg_sat_phy_event.c sg3_utils-1.37/src/sg_sat_phy_event.c
+--- sg3_utils-1.37_old/src/sg_sat_phy_event.c	2013-05-08 21:21:30.000000000 +0800
++++ sg3_utils-1.37/src/sg_sat_phy_event.c	2018-06-19 19:52:13.960809822 +0800
+@@ -64,6 +64,7 @@
+         {"len", no_argument, 0, 'l'},
+         {"raw", no_argument, 0, 'r'},
+         {"reset", no_argument, 0, 'R'},
++        {"help", no_argument, 0, 'h'},
+         {"verbose", no_argument, 0, 'v'},
+         {"version", no_argument, 0, 'V'},
+         {0, 0, 0, 0},
+diff -Nur sg3_utils-1.37_old/src/sg_senddiag.c sg3_utils-1.37/src/sg_senddiag.c
+--- sg3_utils-1.37_old/src/sg_senddiag.c	2013-05-08 21:21:30.000000000 +0800
++++ sg3_utils-1.37/src/sg_senddiag.c	2018-06-19 19:52:13.951810798 +0800
+@@ -96,6 +96,7 @@
+            "    --test|-t       default self-test\n"
+            "    --uoff|-u       unit offline (def: 0, only with '--test')\n"
+            "    --verbose|-v    increase verbosity\n"
++           "    --old|-O        use old interface (use as first option)\n"
+            "    --version|-V    output version string then exit\n\n"
+            "Performs a SCSI SEND DIAGNOSTIC (and/or a RECEIVE DIAGNOSTIC "
+            "RESULTS) command\n"
+@@ -127,6 +128,7 @@
+            "    -uoff   unit offline (def: 0, only with '-t')\n"
+            "    -v      increase verbosity (print issued SCSI cmds)\n"
+            "    -V      output version string\n"
++           "    -N|--new   use new interface\n"
+            "    -?      output this usage message\n\n"
+            "Performs a SCSI SEND DIAGNOSTIC (and/or a RECEIVE DIAGNOSTIC "
+            "RESULTS) command\n"
+diff -Nur sg3_utils-1.37_old/src/sg_start.c sg3_utils-1.37/src/sg_start.c
+--- sg3_utils-1.37_old/src/sg_start.c	2013-05-08 21:21:30.000000000 +0800
++++ sg3_utils-1.37/src/sg_start.c	2018-06-19 19:52:13.951810798 +0800
+@@ -110,6 +110,7 @@
+             "given\n"
+             "    --stop|-S       stop unit (e.g. spin down disk)\n"
+             "    --verbose|-v    increase verbosity\n"
++            "    --old|-O        use old interface (use as first option)\n"
+             "    --version|-V    print version string then exit\n\n"
+             "    Example: 'sg_start --stop /dev/sdb'    stops unit\n"
+             "             'sg_start --eject /dev/scd0'  stops unit and "
+@@ -155,6 +156,7 @@
+             "action\n"
+             "    --stop     stop unit (same as '0')\n"
+             "    -v         verbose (print out SCSI commands)\n"
++            "    -N|--new   use new interface\n"
+             "    -V         print version string then exit\n\n"
+             "    Example: 'sg_start --stop /dev/sdb'    stops unit\n"
+             "             'sg_start --eject /dev/scd0'  stops unit and "
+diff -Nur sg3_utils-1.37_old/src/sg_stpg.c sg3_utils-1.37/src/sg_stpg.c
+--- sg3_utils-1.37_old/src/sg_stpg.c	2013-07-31 07:58:53.000000000 +0800
++++ sg3_utils-1.37/src/sg_stpg.c	2018-06-19 19:55:15.088253110 +0800
+@@ -100,7 +100,7 @@
+           "    --help|-h          print out usage message\n"
+           "    --hex|-H           print out report response in hex, then "
+           "exit\n"
+-          "    --offline|-l       set asymm. access state to offline, takes "
++          "    --offline|-l|-O    set asymm. access state to offline, takes "
+           "relative\n"
+           "                       target port id, rather than target port "
+           "group id\n"
+diff -Nur sg3_utils-1.37_old/src/sg_test_rwbuf.c sg3_utils-1.37/src/sg_test_rwbuf.c
+--- sg3_utils-1.37_old/src/sg_test_rwbuf.c	2013-05-08 21:21:30.000000000 +0800
++++ sg3_utils-1.37/src/sg_test_rwbuf.c	2018-06-19 19:52:13.951810798 +0800
+@@ -334,17 +334,17 @@
+                 " or\n"
+                 "       sg_test_rwbuf DEVICE SZ [AW] [AR]\n");
+         printf ("  where:\n"
+-                "    --addrd=AR       extra bytes to fetch during READ "
++                "    --addrd=AR|-r    extra bytes to fetch during READ "
+                 "BUFFER\n"
+-                "    --addwr=AW       extra bytes to send to WRITE BUFFER\n"
+-                "    --help           output this usage message then exit\n"
+-                "    --quick          output read buffer size then exit\n"
+-                "    --size=SZ        size of buffer (in bytes) to write "
++                "    --addwr=AW|-w    extra bytes to send to WRITE BUFFER\n"
++                "    --help|-l        output this usage message then exit\n"
++                "    --quick|-q       output read buffer size then exit\n"
++                "    --size=SZ|-s     size of buffer (in bytes) to write "
+                 "then read back\n"
+-                "    --times=NUM      number of times to run test "
++                "    --times=NUM|-t   number of times to run test "
+                 "(default 1)\n"
+-                "    --verbose        increase verbosity of output\n"
+-                "    --version        output version then exit\n");
++                "    --verbose|-v     increase verbosity of output\n"
++                "    --version|-V     output version then exit\n");
+         printf ("\nWARNING: If you access the device at the same time, e.g. "
+                 "because it's a\n");
+         printf (" mounted hard disk, the device's buffer may be used by the "
+diff -Nur sg3_utils-1.37_old/src/sg_turs.c sg3_utils-1.37/src/sg_turs.c
+--- sg3_utils-1.37_old/src/sg_turs.c	2013-06-01 02:40:32.000000000 +0800
++++ sg3_utils-1.37/src/sg_turs.c	2018-06-19 19:52:13.951810798 +0800
+@@ -81,6 +81,7 @@
+            "    --time|-t        outputs total duration and commands per "
+            "second\n"
+            "    --verbose|-v     increase verbosity\n"
++           "    --old|-O        use old interface (use as first option)\n"
+            "    --version|-V     print version string then exit\n\n"
+            "Performs a SCSI TEST UNIT READY command (or many of them)\n");
+ }
+@@ -97,6 +98,7 @@
+            "    -t        outputs total duration and commands per "
+            "second\n"
+            "    -v        increase verbosity\n"
++           "    -N|--new  use new interface\n"
+            "    -V        print version string then exit\n\n"
+            "Performs a SCSI TEST UNIT READY command (or many of them)\n");
+ }
+diff -Nur sg3_utils-1.37_old/src/sg_verify.c sg3_utils-1.37/src/sg_verify.c
+--- sg3_utils-1.37_old/src/sg_verify.c	2013-08-26 05:30:30.000000000 +0800
++++ sg3_utils-1.37/src/sg_verify.c	2018-06-19 19:59:15.026705607 +0800
+@@ -67,7 +67,7 @@
+           "sg_verify [--16] [--bpc=BPC] [--count=COUNT] [--dpo] "
+           "[--ebytchk=BCH]\n"
+           "                 [--group=GN] [--help] [--in=IF] "
+-          "[--lba=LBA] [--ndo=NDO]\n"
++          "[--lba=LBA] [--nbo=NBO]\n"
+           "                 [--quiet] [--readonly] [--verbose] "
+           "[--version]\n"
+           "                 [--vrprotect=VRP] DEVICE\n"
+@@ -85,8 +85,8 @@
+           "    --ebytchk=BCH|-E BCH    sets BYTCHK value, either 1, 2 "
+           "or 3 (def: 0).\n"
+           "                            BCH overrides BYTCHK=1 set by "
+-          "'--ndo='. If\n"
+-          "                            BCH is 3 then NDO must be the LBA "
++          "'--nbo='. If\n"
++          "                            BCH is 3 then NBO must be the LBA "
+           "size\n"
+           "                            (plus protection size if DIF "
+           "active)\n"
+@@ -97,7 +97,7 @@
+           "                        only active if --bytchk=N given\n"
+           "    --lba=LBA|-l LBA    logical block address to start "
+           "verify (def: 0)\n"
+-          "    --ndo=NDO|-n NDO    NDO is number of bytes placed in "
++          "    --nbo=NBO|-n NBO    NBO is number of bytes placed in "
+           "data-out buffer.\n"
+           "                        These are fetched from IF (or "
+           "stdin) and used\n"
+@@ -207,10 +207,10 @@
+             lba = (uint64_t)ll;
+             break;
+         case 'n':
+-        case 'B':       /* undocumented, old --bytchk=NDO option */
++        case 'B':       /* undocumented, old --bytchk=NBO option */
+             ndo = sg_get_num(optarg);
+             if (ndo < 1) {
+-                fprintf(stderr, "bad argument to '--ndo'\n");
++                fprintf(stderr, "bad argument to '--nbo'\n");
+                 return SG_LIB_SYNTAX_ERROR;
+             }
+             break;
+@@ -277,7 +277,7 @@
+         bpc = (int)count;
+     } else if (bytchk > 0) {
+         fprintf(stderr, "when the 'ebytchk=BCH' option is given, "
+-                "then '--bytchk=NDO' must also be given\n");
++                "then '--bytchk=NBO' must also be given\n");
+         return SG_LIB_SYNTAX_ERROR;
+     }
+ 
+diff -Nur sg3_utils-1.37_old/src/sg_xcopy.c sg3_utils-1.37/src/sg_xcopy.c
+--- sg3_utils-1.37_old/src/sg_xcopy.c	2013-10-08 22:24:59.000000000 +0800
++++ sg3_utils-1.37/src/sg_xcopy.c	2018-06-19 20:02:36.284619039 +0800
+@@ -500,12 +500,12 @@
+             "sg_xcopy  [bs=BS] [count=COUNT] [ibs=BS] [if=IFILE]"
+             " [iflag=FLAGS]\n"
+             "                 [obs=BS] [of=OFILE] [oflag=FLAGS] "
+-            "[seek=SEEK] [skip=SKIP]\n"
++            "[seek=SEEK] [app=APPEND] [skip=SKIP]\n"
+             "                 [--help] [--version]\n\n"
+             "                 [bpt=BPT] [cat=0|1] [dc=0|1] "
+             "[id_usage=hold|discard|disable]\n"
+             "                 [list_id=ID] [prio=PRIO] [time=0|1] "
+-            "[verbose=VERB]\n"
++            "[verbose=VERB] [conv=CONV]\n"
+             "                 [--on_dst|--on_src] [--verbose]\n"
+             "  where:\n"
+             "    bpt         is blocks_per_transfer (default: 128)\n"
+@@ -532,18 +532,20 @@
+             "                null]\n"
+             "    prio        set priority field to PRIO (def: 1)\n"
+             "    seek        block position to start writing to OFILE\n"
++            "    app         ignored\n"
++            "    conv        ignored\n"
+             "    skip        block position to start reading from IFILE\n"
+             "    time        0->no timing(def), 1->time plus calculate "
+             "throughput\n"
+             "    verbose     0->quiet(def), 1->some noise, 2->more noise, "
+             "etc\n"
+-            "    --help      print out this usage message then exit\n"
++            "    --help|-h   print out this usage message then exit\n"
+             "    --on_dst    send XCOPY command to the output file/device\n"
+             "    --on_src    send XCOPY command to the input file/device.\n"
+             "                Default if this and --on_dst options not "
+             "given\n"
+-            "    --verbose   same action as verbose=1\n"
+-            "    --version   print version information then exit\n\n"
++            "    --verbose|-v   same action as verbose=1\n"
++            "    --version|-V   print version information then exit\n\n"
+             "Copy from IFILE to OFILE, similar to dd command; "
+             "but using the SCSI\nEXTENDED COPY (XCOPY) command.\n");
+ }

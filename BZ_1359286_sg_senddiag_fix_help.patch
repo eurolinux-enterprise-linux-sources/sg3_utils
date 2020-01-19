@@ -1,0 +1,21 @@
+diff -Nur sg3_utils-1.37_old/src/sg_senddiag.c sg3_utils-1.37/src/sg_senddiag.c
+--- sg3_utils-1.37_old/src/sg_senddiag.c	2018-07-17 20:46:38.731809658 +0800
++++ sg3_utils-1.37/src/sg_senddiag.c	2018-07-17 21:15:20.035924083 +0800
+@@ -79,7 +79,7 @@
+            "    --extdur|-e     duration of an extended self-test (from mode "
+            "page 0xa)\n"
+            "    --help|-h       print usage message then exit\n"
+-           "    --hex|H         output in hex\n"
++           "    --hex|-H        output in hex\n"
+            "    --list|-l       list supported page codes (with or without "
+            "DEVICE)\n"
+            "    --pf|-p         set PF bit (def: 0)\n"
+@@ -128,7 +128,7 @@
+            "    -uoff   unit offline (def: 0, only with '-t')\n"
+            "    -v      increase verbosity (print issued SCSI cmds)\n"
+            "    -V      output version string\n"
+-           "    -N|--new   use new interface\n"
++           "    --new|-N   use new interface\n"
+            "    -?      output this usage message\n\n"
+            "Performs a SCSI SEND DIAGNOSTIC (and/or a RECEIVE DIAGNOSTIC "
+            "RESULTS) command\n"
